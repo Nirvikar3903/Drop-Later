@@ -1,19 +1,21 @@
-import * as yup from "yup";
+export const validateRegister = (username, email, password) => {
+  if (!username || !email || !password) return "All fields are required";
+  if (password.length < 6) return "Password must be at least 6 characters";
+  return null;
+};
 
-export const validate = (schema) => async (req, res, next) => {
-  try {
-    const data = {
-      ...req.body,
-      ...req.params,
-      ...req.query,
-    };
+export const validateLogin = (email, password) => {
+  if (!email || !password) return "All fields are required";
+  return null;
+};
 
-    await schema.validate(data, { abortEarly: false });
-    next();
-  } catch (err) {
-    return res.status(400).json({
-      message: "Validation error",
-      errors: err.errors,
-    });
+
+export const validateNote = ({ title, content }) => {
+  if (!title || !content) {
+    return { error: { details: [{ message: "Title and content are required" }] } };
   }
+  if (title.length < 3) {
+    return { error: { details: [{ message: "Title must be at least 3 characters" }] } };
+  }
+  return { error: null };
 };
